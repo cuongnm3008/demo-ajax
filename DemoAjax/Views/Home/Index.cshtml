@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.min.js" integrity="sha512-EKWWs1ZcA2ZY9lbLISPz8aGR2+L7JVYqBAYTq5AXgBkSjRSuQEGqWx8R1zAX16KdXPaCjOCaKE8MCpU0wcHlHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/lib/jquery/jquery-3.6.0.min.js"></script>
+<div class="container">
+    <button type="button" class="btn btn-success mb-5" data-toggle="modal" data-target="#myModal">Create</button>
+    <button id="view" type="button" class="btn btn-success mb-5">View</button>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create new customer</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input class="form-control" type="text" name="name" id="name" value="" placeholder="Enter your name..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input class="form-control" type="text" name="address" id="address" value="" placeholder="Enter your address..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input class="form-control" type="number" name="age" id="age" value="" placeholder="Enter age..." />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="create" type="button" class="btn btn-success">Create</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <table class="table table-hover">
+        <thead>
+            <tr class="" style="background-color: cadetblue">
+                <th>Name</th>
+                <th>Address</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody id="content">
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#view").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:38622/api/customers",
+                success: function (result) {
+                    var str = "";
+                    for (const item of result) {
+                        str = str + "<tr>"
+                        str = str + "<td>" + item["name"] + "</td> \n";
+                        str = str + "<td>" + item["address"] + "</td> \n";
+                        str = str + "<td>" + item["age"] + "</td> \n";
+                        str = str + "</tr>"
+                    }
+                    $("#content").html(str);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#create").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:38622/api/customers",
+                success: function (result) {
+                    var str = "";
+                    for (const item of result) {
+                        str = str + "<tr>"
+                        str = str + "<td>" + item["name"] + "</td> \n";
+                        str = str + "<td>" + item["address"] + "</td> \n";
+                        str = str + "<td>" + item["age"] + "</td> \n";
+                        str = str + "</tr>"
+                    }
+                    $("#content").html(str);
+                }
+            });
+        });
+    });
+</script>
